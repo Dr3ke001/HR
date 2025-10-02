@@ -6,12 +6,19 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background-color: #36393f;
+  background-color: #1e3a8a; /* fundal albastru în afara panel-ului */
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   margin: 0;
+  flex-direction: column;
+}
+
+.panel-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
 }
 
 .panel {
@@ -59,18 +66,44 @@ button {
 button:hover { background-color: #5b6eae; }
 
 #msg { text-align: center; margin-top: 10px; font-weight: bold; }
+
+/* logo */
+.logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* footer */
+.footer {
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.footer span.white { color: #fff; }
+.footer span.red { color: #ff0000; }
+.footer span.blue { color: #1e3a8a; }
 </style>
 </head>
 <body>
-<div class="panel">
-  <h2>Formular Programare</h2>
-  <input id="id" placeholder="ID">
-  <input id="nume" placeholder="Nume">
-  <input id="discord" placeholder="Discord">
-  <input id="telefon" placeholder="Telefon">
-  <textarea id="mentiuni" placeholder="Mentiuni"></textarea>
-  <button id="send">Trimite</button>
-  <div id="msg"></div>
+<div class="panel-container">
+  <div class="panel">
+    <h2>Formular Programare</h2>
+    <input id="id" placeholder="ID">
+    <input id="nume" placeholder="Nume">
+    <input id="discord" placeholder="Discord">
+    <input id="telefon" placeholder="Telefon">
+    <textarea id="mentiuni" placeholder="Mentiuni"></textarea>
+    <button id="send">Trimite</button>
+    <div id="msg"></div>
+  </div>
+  <img class="logo" src="https://i.imgur.com/qd4N652.png" alt="Logo">
+</div>
+
+<div class="footer">
+  <span class="white">OG</span><span class="red">Land</span> <span class="white">Police</span> <span class="blue">Departament</span>
 </div>
 
 <script>
