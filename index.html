@@ -1,40 +1,123 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<title>Formular HR</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #36393f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.panel {
+  background-color: #2f3136;
+  border-radius: 12px;
+  width: 420px;
+  padding: 25px 30px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel h2 {
+  text-align: center;
+  color: #00b0f4;
+  margin-top: 0;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: #40444b;
+  color: #fff;
+  font-size: 14px;
+}
+
+input::placeholder, textarea::placeholder { color: #999; }
+
+textarea { resize: none; height: 80px; }
+
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #7289da;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover { background-color: #5b6eae; }
+
+#msg { text-align: center; margin-top: 10px; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="panel">
+  <h2>Formular Programare</h2>
+  <input id="id" placeholder="ID">
+  <input id="nume" placeholder="Nume">
+  <input id="discord" placeholder="Discord">
+  <input id="telefon" placeholder="Telefon">
+  <textarea id="mentiuni" placeholder="Mentiuni"></textarea>
+  <button id="send">Trimite</button>
+  <div id="msg"></div>
+</div>
+
 <script>
-  const API_URL = "https://script.google.com/macros/s/PASTE_EXEC_URL/exec"; // URL-ul Web App (…/exec)
+const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1396254683894513768/HHK0g_trj4zpBIl_A-8vMlr-vVNFroQvZ7rdJqdDe0nyT5X_aXUf0Q1V2Jf4M6PPSpbL";
 
-  const SECRET = "SUPER_SECRETA_TA_LUNGA"; // aceeași și în Replit
+document.getElementById("send").addEventListener("click", async () => {
+  const data = {
+    id: document.getElementById("id").value.trim(),
+    nume: document.getElementById("nume").value.trim(),
+    discord: document.getElementById("discord").value.trim(),
+    telefon: document.getElementById("telefon").value.trim(),
+    mentiuni: document.getElementById("mentiuni").value.trim()
+  };
 
-  document.getElementById("send").addEventListener("click", async () => {
-    const data = {
-      id: document.getElementById("id").value.trim(),
-      nume: document.getElementById("nume").value.trim(),
-      discord: document.getElementById("discord").value.trim(),
-      telefon: document.getElementById("telefon").value.trim(),
-      mentiuni: document.getElementById("mentiuni").value.trim(),
-      hp_field: document.getElementById("hp_field")?.value || "",
-      secret: SECRET
-    };
+  if (!/^\d{3,10}$/.test(data.id)) return show("⚠️ ID invalid");
+  if (!(data.nume.length >= 2 && data.nume.length <= 50)) return show("⚠️ Nume invalid");
 
-    // validări minime
-    if (!/^\d{3,10}$/.test(data.id)) return show("⚠️ ID invalid");
-    if (!(data.nume.length >= 2 && data.nume.length <= 50)) return show("⚠️ Nume invalid");
+  const discordPayload = {
+    embeds: [{
+      title: "📋 Formular primit",
+      color: 7506394,
+      fields: [
+        { name: "🆔 ID", value: data.id, inline: true },
+        { name: "👤 Nume", value: data.nume, inline: true },
+        { name: "💬 Discord", value: data.discord || "N/A", inline: false },
+        { name: "📞 Telefon", value: data.telefon || "N/A", inline: false },
+        { name: "📝 Mentiuni", value: data.mentiuni || "N/A", inline: false }
+      ]
+    }]
+  };
 
-    try {
-      await fetch(API_URL, {
-        method: "POST",
-        // evităm preflight-ul CORS
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify(data),
-        // opțional (și mai safe față de CORS):
-        // mode: "no-cors"
-      });
-      show("✔ Felicitări, ai fost programat! Așteaptă să fii contactat.", true);
-    } catch (e) {
-      show("❌ Nu s-a putut trimite. Încearcă mai târziu.");
-    }
+  try {
+    await fetch(DISCORD_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(discordPayload)
+    });
+    show("✔ Felicitări, ai fost programat! Așteaptă să fii contactat.", true);
+  } catch {
+    show("❌ Nu s-a putut trimite. Încearcă mai târziu.");
+  }
 
-    function show(t, ok=false){
-      document.getElementById("msg").innerHTML =
-        `<span style="color:${ok?'lime':'#ff6b6b'}">${t}</span>`;
-    }
-  });
+  function show(t, ok=false){
+    document.getElementById("msg").innerHTML =
+      `<span style="color:${ok?'lime':'#ff6b6b'}">${t}</span>`;
+  }
+});
 </script>
+</body>
+</html>
